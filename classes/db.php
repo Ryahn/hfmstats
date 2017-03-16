@@ -1,21 +1,14 @@
 <?php
 $data = include("../config.php");
-$configs = json_decode($data);
-$db = $configs->dbinfo;
-
 
 class Database extends PDO {
-  private $host     = $db->host;
-  private $user     = $db->dbuser;
-  private $pass     = $db->dbpass;
-  private $dbname   = $db->dbname;
 
   public function __construct() {
     //SET DSN
-    $dsn = 'mysql:host=' . $this->host . ';dbname=' . $this->dbname;
+    $dsn = 'mysql:host=' . $data->dbinfo->host . ';dbname=' . $data->dbinfo->dbname;
     //CREATE PDO INSTANCE
     try {
-      parent::__construct($dsn, $this->user, $this->pass);
+      parent::__construct($dsn, $data->dbinfo->dbuser, $data->dbinfo->dbpass);
     }
     //CATCH ERRORS
     catch(PDOException $e) {
@@ -23,8 +16,3 @@ class Database extends PDO {
     }
   }
 }
-
-function Salt(){
-    return substr(strtr(base64_encode(hex2bin(RandomToken(32))), '+', '.'), 0, 44);
-}
-echo Salt();
